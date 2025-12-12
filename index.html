@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Days Calculator</title>
+
+  <!-- ✅ PWA manifest + theme color -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2C2F33">
+
+  <style>
+    body {
+      background-color: #2C2F33; /* Discord dark gray */
+      color: #FFFFFF; /* White text */
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* vertical center */
+      align-items: center;     /* horizontal center */
+      height: 100vh;           /* full screen height */
+      margin: 0;
+    }
+
+    label, input, p {
+      font-size: 4em; /* doubled again */
+      margin: 30px;
+    }
+
+    input {
+      padding: 30px;
+      border-radius: 12px;
+      border: none;
+      background-color: #23272A; /* darker input field */
+      color: #FFFFFF;
+      width: 400px;
+      text-align: center;
+      font-size: 4em;
+    }
+
+    #result {
+      font-size: 6em; /* extra large output */
+      margin-bottom: 60px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Output shelf on top -->
+  <p id="result"></p>
+
+  <!-- Input shelf on bottom -->
+  <label for="daysInput">Number of Days:</label>
+  <input type="number" id="daysInput" />
+
+  <script>
+    function formatDate(date) {
+      let month = String(date.getMonth() + 1).padStart(2, '0');
+      let day = String(date.getDate()).padStart(2, '0');
+      let year = date.getFullYear();
+      return `${month}-${day}-${year}`;
+    }
+
+    function updateDate() {
+      let days = parseInt(document.getElementById("daysInput").value) || 0;
+      let today = new Date();
+      today.setDate(today.getDate() + days);
+      document.getElementById("result").innerText = formatDate(today);
+    }
+
+    // Set default output as today's date
+    document.getElementById("result").innerText = formatDate(new Date());
+
+    // Update automatically on input
+    document.getElementById("daysInput").addEventListener("input", updateDate);
+
+    /* ✅ Register service worker for PWA */
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+</body>
+</html>
